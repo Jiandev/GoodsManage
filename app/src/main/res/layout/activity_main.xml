@@ -13,14 +13,62 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
-        <FrameLayout
+        <LinearLayout
             android:id="@+id/layout_home"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:text="根据价格搜索："
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/edit_min"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="最低价格"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/edit_max"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="最高价格"
+                    android:inputType="numberDecimal"
+                    android:maxLines="1"
+                    android:textSize="13sp" />
+
+                <Button
+                    android:id="@+id/btn_search"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="搜索"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:background="@color/qmui_config_color_white"
                 android:fitsSystemWindows="true"
                 android:orientation="vertical">
@@ -38,8 +86,8 @@
                     android:layout_weight="1"
                     android:fitsSystemWindows="true" />
             </LinearLayout>
-        </FrameLayout>
 
+        </LinearLayout>
     </FrameLayout>
 
     <android.support.design.widget.BottomNavigationView

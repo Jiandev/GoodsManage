@@ -31,6 +31,7 @@ public class GoodsListActivity extends AppCompatActivity {
     private Context mContext;
     private List<Goods> goodsList = new ArrayList<>();
     private HomeRecyclerAdapter adapter;
+    private boolean isSection = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,13 +39,20 @@ public class GoodsListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_goods_list);
         mContext = GoodsListActivity.this;
 
-        search = getIntent().getStringExtra("search");
-        initGoodsList();
+        isSection = getIntent().getBooleanExtra("isSection", false);
+        if (isSection) {
+            String max = getIntent().getStringExtra("max");
+            String min = getIntent().getStringExtra("min");
+            initGoodsList(BaseUtils.BASE_URL + "/searchPriceGoods?MinPrice=" + min + "&MaxPrice=" + max);
+        }else {
+            search = getIntent().getStringExtra("search");
+            initGoodsList(BaseUtils.BASE_URL + "/searchGoods?search=" + search);
+        }
     }
 
-    private void initGoodsList() {
+    private void initGoodsList(String url) {
         BaseUtils.showProgressDialog(mContext, "正在搜索...");
-        HttpUtils.doGet(BaseUtils.BASE_URL + "/searchGoods?search=" + search, new Callback() {
+        HttpUtils.doGet(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 BaseUtils.closeProgressDialog();

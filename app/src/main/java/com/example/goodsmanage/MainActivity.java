@@ -15,8 +15,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.example.goodsmanage.acitvity.GoodsListActivity;
 import com.example.goodsmanage.adapter.ViewPagerFragmentAdapter;
@@ -42,7 +43,7 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private FrameLayout layoutHome;
+    private LinearLayout layoutHome;
     private Context mContext;
     private QMUITabSegment mTabSegment;
     private ViewPager mContentViewPager;
@@ -50,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
     List<Type> typeList = new ArrayList<>();
     List<Fragment> fragmentList = new ArrayList<>();
     private String TAG = "MainActivity";
+
+    private EditText editMax;
+    private EditText editMin;
+    private Button btnSearch;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -80,6 +85,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        editMax = findViewById(R.id.edit_max);
+        editMin = findViewById(R.id.edit_min);
+        btnSearch = findViewById(R.id.btn_search);
         mTabSegment = findViewById(R.id.tabSegment);
         mContentViewPager = findViewById(R.id.contentViewPager);
         layoutHome = findViewById(R.id.layout_home);
@@ -108,6 +116,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String max = editMax.getText().toString();
+                String min = editMin.getText().toString();
+                if (TextUtils.isEmpty(max) || TextUtils.isEmpty(min)) {
+                    ToastUtil.showMsg(mContext, "请输入最大值和最小值");
+                    return;
+                }
+                Intent intent = new Intent(mContext, GoodsListActivity.class);
+                intent.putExtra("isSection", true);
+                intent.putExtra("max", max);
+                intent.putExtra("min", min);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initTabAndPager() {
