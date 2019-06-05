@@ -1,6 +1,7 @@
 package com.example.goodsmanage;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -8,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
@@ -16,15 +18,19 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.goodsmanage.acitvity.GoodsListActivity;
 import com.example.goodsmanage.adapter.ViewPagerFragmentAdapter;
 import com.example.goodsmanage.common.entity.Type;
 import com.example.goodsmanage.common.utils.BaseUtils;
 import com.example.goodsmanage.common.utils.HttpUtils;
+import com.example.goodsmanage.common.utils.ToastUtil;
 import com.example.goodsmanage.fragment.GoodsListFragment;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.qmuiteam.qmui.util.QMUIDisplayHelper;
 import com.qmuiteam.qmui.widget.QMUITabSegment;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -184,9 +190,38 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.search:
-                Log.e(TAG, "onOptionsItemSelected: ");
+                showSearchDialog(mContext);
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showSearchDialog(final Context context) {
+        final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(context);
+        builder.setTitle("搜索商品")
+                .setPlaceholder("输入商品名称")
+                .setInputType(InputType.TYPE_CLASS_TEXT)
+                .setCanceledOnTouchOutside(false)
+                .addAction("取消", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        dialog.dismiss();
+                    }
+                })
+                .addAction("搜索", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(final QMUIDialog dialog, int index) {
+                        String search = builder.getEditText().getText().toString();
+                        if (search.length() > 0) {
+                            Intent intent = new Intent(mContext, GoodsListActivity.class);
+                            intent.putExtra("search", search);
+                            startActivity(intent);
+                            dialog.dismiss();
+                        } else {
+                            ToastUtil.showMsg(context, "请输入商品名称");
+                        }
+                    }
+                })
+                .create().show();
     }
 }
