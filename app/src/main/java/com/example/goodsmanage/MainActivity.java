@@ -26,6 +26,7 @@ import com.example.goodsmanage.acitvity.AllCommentActivity;
 import com.example.goodsmanage.acitvity.AllOrderActivity;
 import com.example.goodsmanage.acitvity.AllPublishActivity;
 import com.example.goodsmanage.acitvity.GoodsListActivity;
+import com.example.goodsmanage.acitvity.ModifyUserActivity;
 import com.example.goodsmanage.adapter.ViewPagerFragmentAdapter;
 import com.example.goodsmanage.common.entity.Type;
 import com.example.goodsmanage.common.utils.BaseUtils;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText editMin;
     private Button btnSearch;
 
-    private TextView tvAllPublish, tvAllOrder, tvAllComment;
+    private TextView tvAllPublish, tvAllOrder, tvAllComment, tvModifyUser;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -101,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        tvModifyUser = findViewById(R.id.tv_modify_user);
         tvAllPublish = findViewById(R.id.tv_all_publish);
         tvAllOrder = findViewById(R.id.tv_all_order);
         tvAllComment = findViewById(R.id.tv_all_comment);
@@ -174,6 +176,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(mContext, AllOrderActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        tvModifyUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, ModifyUserActivity.class);
                 startActivity(intent);
             }
         });

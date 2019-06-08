@@ -45,4 +45,18 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#dedede" />
+
+    <TextView
+        android:id="@+id/tv_modify_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/selector_recycler_bg"
+        android:padding="10dp"
+        android:text="修改用户信息"
+        android:textSize="16sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dedede" />
 </LinearLayout>

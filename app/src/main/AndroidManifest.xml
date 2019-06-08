@@ -18,7 +18,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".acitvity.PublishGoodsActivity"
+        <activity android:name=".acitvity.ModifyUserActivity"></activity>
+        <activity
+            android:name=".acitvity.PublishGoodsActivity"
             android:label="我的商品" />
         <activity
             android:name=".acitvity.AllPublishActivity"
