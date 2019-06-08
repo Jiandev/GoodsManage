@@ -1,5 +1,6 @@
 package com.example.goodsmanage.fragment;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -57,16 +58,16 @@ public class GoodsListFragment extends Fragment {
     }
 
     private void initGoodsList() {
-        BaseUtils.showProgressDialog(mContext, "加载中...");
+        final ProgressDialog progressDialog = BaseUtils.showProgressDialog(mContext, "加载中...");
         HttpUtils.doGet(BaseUtils.BASE_URL + "/getAllGoods?TypeID=" + typeId, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                BaseUtils.closeProgressDialog();
+                BaseUtils.closeProgressDialog(progressDialog);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BaseUtils.closeProgressDialog();
+                BaseUtils.closeProgressDialog(progressDialog);
                 String responseStr = response.body().string();
                 parseGoodsList(responseStr);
                 getActivity().runOnUiThread(new Runnable() {

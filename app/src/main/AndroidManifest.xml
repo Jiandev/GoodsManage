@@ -18,8 +18,10 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".acitvity.AddGoodsActivity"></activity>
-        <activity android:name=".MainActivity">
+        <activity android:name=".RegisterActivity"
+            android:label="注册"/>
+        <activity
+            android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,9 +29,17 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".acitvity.AddGoodsActivity"
+            android:label="发布商品" />
+        <activity
+            android:name=".MainActivity"
+            android:label="首页" />
+        <activity
             android:name=".acitvity.GoodsActivity"
             android:label="商品详情" />
-        <activity android:name=".acitvity.GoodsListActivity" />
+        <activity
+            android:name=".acitvity.GoodsListActivity"
+            android:label="商品列表" />
     </application>
 
 </manifest>

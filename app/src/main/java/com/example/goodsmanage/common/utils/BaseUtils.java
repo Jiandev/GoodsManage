@@ -21,20 +21,25 @@ public class BaseUtils {
 
     public static final String GOODS_ID = "goodsId";
     public static final String BASE_URL = "http://192.168.199.222:8080/GoodsManage/servlet";
-    public static int userId = 1;
+    public static int userId = 0;
 
-    private static ProgressDialog progressDialog;
-
-    public static void showProgressDialog(Context mContext, String msg) {
-        if (progressDialog == null) {
-            progressDialog = new ProgressDialog(mContext);
-            progressDialog.setMessage(msg);
-            progressDialog.setCanceledOnTouchOutside(false);
-        }
-        progressDialog.show();
+    public static int getUserId() {
+        return userId;
     }
 
-    public static void closeProgressDialog() {
+    public static void setUserId(int userId) {
+        BaseUtils.userId = userId;
+    }
+
+    public static ProgressDialog showProgressDialog(Context mContext, String msg) {
+        ProgressDialog progressDialog = new ProgressDialog(mContext);
+            progressDialog.setMessage(msg);
+            progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+        return progressDialog;
+    }
+
+    public static void closeProgressDialog(ProgressDialog progressDialog) {
         if (progressDialog != null) {
             progressDialog.dismiss();
         }

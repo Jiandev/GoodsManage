@@ -1,5 +1,6 @@
 package com.example.goodsmanage;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -95,17 +96,17 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        BaseUtils.showProgressDialog(mContext, "加载中...");
+        final ProgressDialog progressDialog = BaseUtils.showProgressDialog(mContext, "加载中...");
         HttpUtils.doGet(BaseUtils.BASE_URL + "/getAllGoodsType",
                 new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                BaseUtils.closeProgressDialog();
+                BaseUtils.closeProgressDialog(progressDialog);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BaseUtils.closeProgressDialog();
+                BaseUtils.closeProgressDialog(progressDialog);
                 String responseStr = response.body().string();
                 typeList = BaseUtils.parseType(responseStr);
                 runOnUiThread(new Runnable() {

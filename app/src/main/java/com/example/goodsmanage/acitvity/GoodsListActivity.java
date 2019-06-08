@@ -1,5 +1,6 @@
 package com.example.goodsmanage.acitvity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -51,16 +52,16 @@ public class GoodsListActivity extends AppCompatActivity {
     }
 
     private void initGoodsList(String url) {
-        BaseUtils.showProgressDialog(mContext, "正在搜索...");
+        final ProgressDialog progressDialog = BaseUtils.showProgressDialog(mContext, "正在搜索...");
         HttpUtils.doGet(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                BaseUtils.closeProgressDialog();
+                BaseUtils.closeProgressDialog(progressDialog);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                BaseUtils.closeProgressDialog();
+                BaseUtils.closeProgressDialog(progressDialog);
                 String responseStr = response.body().string();
                 parseGoodsList(responseStr);
                 runOnUiThread(new Runnable() {
