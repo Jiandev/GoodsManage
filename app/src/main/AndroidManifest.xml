@@ -18,8 +18,17 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".acitvity.AllOrderActivity"></activity>
-        <activity android:name=".acitvity.AllCommentActivity" />
+        <activity android:name=".acitvity.PublishGoodsActivity"
+            android:label="我的商品" />
+        <activity
+            android:name=".acitvity.AllPublishActivity"
+            android:label="已发布商品" />
+        <activity
+            android:name=".acitvity.AllOrderActivity"
+            android:label="所有订单" />
+        <activity
+            android:name=".acitvity.AllCommentActivity"
+            android:label="所有评论" />
         <activity
             android:name=".RegisterActivity"
             android:label="注册" />

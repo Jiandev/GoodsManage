@@ -24,6 +24,7 @@ import android.widget.TextView;
 import com.example.goodsmanage.acitvity.AddGoodsActivity;
 import com.example.goodsmanage.acitvity.AllCommentActivity;
 import com.example.goodsmanage.acitvity.AllOrderActivity;
+import com.example.goodsmanage.acitvity.AllPublishActivity;
 import com.example.goodsmanage.acitvity.GoodsListActivity;
 import com.example.goodsmanage.adapter.ViewPagerFragmentAdapter;
 import com.example.goodsmanage.common.entity.Type;
@@ -164,7 +165,8 @@ public class MainActivity extends AppCompatActivity {
         tvAllPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent = new Intent(mContext, AllPublishActivity.class);
+                startActivity(intent);
             }
         });
 
