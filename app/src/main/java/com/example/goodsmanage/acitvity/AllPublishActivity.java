@@ -34,7 +34,6 @@ public class AllPublishActivity extends AppCompatActivity {
     private Context mContext;
     private List<Goods> goodsList = new ArrayList<>();
     private AllPublishRecyclerAdapter adapter;
-    private boolean isSection = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

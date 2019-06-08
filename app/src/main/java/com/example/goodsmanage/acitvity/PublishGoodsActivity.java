@@ -2,21 +2,27 @@ package com.example.goodsmanage.acitvity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.goodsmanage.LoginActivity;
 import com.example.goodsmanage.R;
 import com.example.goodsmanage.adapter.CommentRecyclerAdapter;
 import com.example.goodsmanage.common.entity.Comment;
 import com.example.goodsmanage.common.entity.Goods;
+import com.example.goodsmanage.common.entity.Result;
 import com.example.goodsmanage.common.utils.BaseUtils;
 import com.example.goodsmanage.common.utils.HttpUtils;
+import com.example.goodsmanage.common.utils.ToastUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -39,6 +45,10 @@ public class PublishGoodsActivity extends AppCompatActivity {
     private TextView tvId;
     private Context mContext;
 
+    private Button btnModify;
+
+    public static boolean isModify = false;
+
     private RecyclerView recyclerComment;
     private List<Comment> commentList = new ArrayList<>();
     private CommentRecyclerAdapter commentRecyclerAdapter;
@@ -50,6 +60,12 @@ public class PublishGoodsActivity extends AppCompatActivity {
         goodsId = getIntent().getIntExtra(BaseUtils.GOODS_ID, 1);
         mContext = PublishGoodsActivity.this;
         initView();
+        getGoods(goodsId);
+        initComments();
+    }
+
+    private void getGoods(int goodsId) {
+
         final ProgressDialog progressDialog = BaseUtils.showProgressDialog(mContext, "加载中...");
         HttpUtils.doGet(BaseUtils.BASE_URL + "/getOneGood?ID=" + goodsId, new Callback() {
             @Override
@@ -69,7 +85,15 @@ public class PublishGoodsActivity extends AppCompatActivity {
                 });
             }
         });
-        initComments();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (isModify) {
+            getGoods(goodsId);
+            isModify = false;
+        }
     }
 
     private void initComments() {
@@ -127,5 +151,16 @@ public class PublishGoodsActivity extends AppCompatActivity {
         tvNum = findViewById(R.id.tv_publish_goods_num_info);
         tvIntro = findViewById(R.id.tv_publish_goods_intro_info);
         recyclerComment = findViewById(R.id.recycler_publish_comment);
+        btnModify = findViewById(R.id.btn_publish_modify);
+
+        btnModify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, ModifyGoodsActivity.class);
+                intent.putExtra(BaseUtils.GOODS_ID, goodsId);
+                startActivity(intent);
+            }
+        });
+
     }
 }
