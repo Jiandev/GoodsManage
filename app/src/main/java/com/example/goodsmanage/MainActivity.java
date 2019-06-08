@@ -19,8 +19,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.goodsmanage.acitvity.AddGoodsActivity;
+import com.example.goodsmanage.acitvity.AllCommentActivity;
 import com.example.goodsmanage.acitvity.GoodsListActivity;
 import com.example.goodsmanage.adapter.ViewPagerFragmentAdapter;
 import com.example.goodsmanage.common.entity.Type;
@@ -46,6 +48,8 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
 
     private LinearLayout layoutHome;
+    private LinearLayout layoutMine;
+    private LinearLayout layoutShopCar;
     private Context mContext;
     private QMUITabSegment mTabSegment;
     private ViewPager mContentViewPager;
@@ -58,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     private EditText editMin;
     private Button btnSearch;
 
+    private TextView tvAllPublish, tvAllOrder, tvAllComment;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -65,13 +71,19 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
+                    layoutShopCar.setVisibility(View.GONE);
+                    layoutMine.setVisibility(View.GONE);
                     layoutHome.setVisibility(View.VISIBLE);
                     return true;
                 case R.id.navigation_shopcar:
                     layoutHome.setVisibility(View.GONE);
+                    layoutMine.setVisibility(View.GONE);
+                    layoutShopCar.setVisibility(View.VISIBLE);
                     return true;
                 case R.id.navigation_mine:
+                    layoutShopCar.setVisibility(View.GONE);
                     layoutHome.setVisibility(View.GONE);
+                    layoutMine.setVisibility(View.VISIBLE);
                     return true;
             }
             return false;
@@ -87,36 +99,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        tvAllPublish = findViewById(R.id.tv_all_publish);
+        tvAllOrder = findViewById(R.id.tv_all_order);
+        tvAllComment = findViewById(R.id.tv_all_comment);
         editMax = findViewById(R.id.edit_max);
         editMin = findViewById(R.id.edit_min);
         btnSearch = findViewById(R.id.btn_search);
         mTabSegment = findViewById(R.id.tabSegment);
         mContentViewPager = findViewById(R.id.contentViewPager);
         layoutHome = findViewById(R.id.layout_home);
+        layoutMine = findViewById(R.id.layout_mine);
+        layoutShopCar = findViewById(R.id.layout_shopcar);
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         final ProgressDialog progressDialog = BaseUtils.showProgressDialog(mContext, "加载中...");
         HttpUtils.doGet(BaseUtils.BASE_URL + "/getAllGoodsType",
                 new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                BaseUtils.closeProgressDialog(progressDialog);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                BaseUtils.closeProgressDialog(progressDialog);
-                String responseStr = response.body().string();
-                typeList = BaseUtils.parseType(responseStr);
-                runOnUiThread(new Runnable() {
                     @Override
-                    public void run() {
-                        initTabAndPager();
+                    public void onFailure(Call call, IOException e) {
+                        BaseUtils.closeProgressDialog(progressDialog);
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        BaseUtils.closeProgressDialog(progressDialog);
+                        String responseStr = response.body().string();
+                        typeList = BaseUtils.parseType(responseStr);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                initTabAndPager();
+                            }
+                        });
                     }
                 });
-            }
-        });
 
         btnSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,6 +149,28 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("max", max);
                 intent.putExtra("min", min);
                 startActivity(intent);
+            }
+        });
+
+        tvAllComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(mContext, AllCommentActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        tvAllPublish.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        tvAllOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }

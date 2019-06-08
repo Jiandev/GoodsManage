@@ -34,8 +34,8 @@ public class BaseUtils {
 
     public static ProgressDialog showProgressDialog(Context mContext, String msg) {
         ProgressDialog progressDialog = new ProgressDialog(mContext);
-            progressDialog.setMessage(msg);
-            progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setMessage(msg);
+        progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
         return progressDialog;
     }
@@ -50,7 +50,8 @@ public class BaseUtils {
         List<Type> typeList = new ArrayList<>();
         if (!TextUtils.isEmpty(responseStr)) {
             Gson gson = new Gson();
-            typeList = gson.fromJson(responseStr, new TypeToken<ArrayList<Type>>(){}.getType());
+            typeList = gson.fromJson(responseStr, new TypeToken<ArrayList<Type>>() {
+            }.getType());
         }
         return typeList;
     }

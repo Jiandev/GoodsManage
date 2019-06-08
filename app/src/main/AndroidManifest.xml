@@ -18,10 +18,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".RegisterActivity"
-            android:label="注册"/>
+        <activity android:name=".acitvity.AllCommentActivity"></activity>
         <activity
-            android:name=".LoginActivity">
+            android:name=".RegisterActivity"
+            android:label="注册" />
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

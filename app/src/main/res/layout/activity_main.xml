@@ -13,6 +13,16 @@
         android:layout_height="0dp"
         android:layout_weight="1">
 
+        <include
+            android:id="@+id/layout_mine"
+            layout="@layout/layout_mine"
+            android:visibility="gone"/>
+
+        <include
+            android:id="@+id/layout_shopcar"
+            layout="@layout/layout_shopcar"
+            android:visibility="gone"/>
+
         <LinearLayout
             android:id="@+id/layout_home"
             android:layout_width="match_parent"
