@@ -73,7 +73,12 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call call, IOException e) {
                 BaseUtils.closeProgressDialog(progressDialog);
-                ToastUtil.showMsg(mContext, "登陆失败");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ToastUtil.showMsg(mContext, "网络错误");
+                    }
+                });
             }
 
             @Override
