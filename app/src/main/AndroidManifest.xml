@@ -18,6 +18,7 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".acitvity.AddGoodsActivity"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,7 +29,7 @@
         <activity
             android:name=".acitvity.GoodsActivity"
             android:label="商品详情" />
-        <activity android:name=".acitvity.GoodsListActivity"></activity>
+        <activity android:name=".acitvity.GoodsListActivity" />
     </application>
 
 </manifest>

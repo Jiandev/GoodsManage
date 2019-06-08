@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.example.goodsmanage.acitvity.AddGoodsActivity;
 import com.example.goodsmanage.acitvity.GoodsListActivity;
 import com.example.goodsmanage.adapter.ViewPagerFragmentAdapter;
 import com.example.goodsmanage.common.entity.Type;
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call call, Response response) throws IOException {
                 BaseUtils.closeProgressDialog();
                 String responseStr = response.body().string();
-                typeList = parseType(responseStr);
+                typeList = BaseUtils.parseType(responseStr);
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -178,15 +179,6 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private List<Type> parseType(String responseStr) {
-        List<Type> typeList = new ArrayList<>();
-        if (!TextUtils.isEmpty(responseStr)) {
-            Gson gson = new Gson();
-            typeList = gson.fromJson(responseStr, new TypeToken<ArrayList<Type>>(){}.getType());
-        }
-        return typeList;
-    }
-
     private class ViewPageOnPagerChangedListener implements ViewPager.OnPageChangeListener {
         @Override
         public void onPageScrolled(int i, float v, int i1) {
@@ -215,6 +207,10 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.search:
                 showSearchDialog(mContext);
+                break;
+            case R.id.add:
+                Intent intent = new Intent(mContext, AddGoodsActivity.class);
+                startActivity(intent);
                 break;
         }
         return super.onOptionsItemSelected(item);

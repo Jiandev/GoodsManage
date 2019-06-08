@@ -8,4 +8,10 @@
         android:orderInCategory="100"
         android:title="搜索"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/add"
+        android:orderInCategory="100"
+        android:title="发布"
+        app:showAsAction="always" />
 </menu>
