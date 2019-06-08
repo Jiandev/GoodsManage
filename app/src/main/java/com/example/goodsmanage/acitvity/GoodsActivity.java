@@ -2,21 +2,27 @@ package com.example.goodsmanage.acitvity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.goodsmanage.LoginActivity;
 import com.example.goodsmanage.R;
 import com.example.goodsmanage.adapter.CommentRecyclerAdapter;
 import com.example.goodsmanage.common.entity.Comment;
 import com.example.goodsmanage.common.entity.Goods;
+import com.example.goodsmanage.common.entity.Result;
 import com.example.goodsmanage.common.utils.BaseUtils;
 import com.example.goodsmanage.common.utils.HttpUtils;
+import com.example.goodsmanage.common.utils.ToastUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -38,6 +44,7 @@ public class GoodsActivity extends AppCompatActivity {
     private TextView tvIntro;
     private TextView tvId;
     private Context mContext;
+    private Button btnAddCar;
 
     private RecyclerView recyclerComment;
     private List<Comment> commentList = new ArrayList<>();
@@ -100,7 +107,8 @@ public class GoodsActivity extends AppCompatActivity {
     private void parseCommentList(String responseStr) {
         if (!TextUtils.isEmpty(responseStr)) {
             Gson gson = new Gson();
-            commentList = gson.fromJson(responseStr, new TypeToken<ArrayList<Comment>>(){}.getType());
+            commentList = gson.fromJson(responseStr, new TypeToken<ArrayList<Comment>>() {
+            }.getType());
         }
     }
 
@@ -127,5 +135,49 @@ public class GoodsActivity extends AppCompatActivity {
         tvNum = findViewById(R.id.tv_goods_num_info);
         tvIntro = findViewById(R.id.tv_goods_intro_info);
         recyclerComment = findViewById(R.id.recycler_comment);
+        btnAddCar = findViewById(R.id.btn_add_car);
+        btnAddCar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final ProgressDialog progressDialog = BaseUtils.showProgressDialog(mContext, "正在删除...");
+                int userId = BaseUtils.getUserId();
+                if (userId <= 0) {
+                    ToastUtil.showMsg(mContext, "登录失效，请重新登录");
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                    return;
+                }
+                HttpUtils.doGet(BaseUtils.BASE_URL + "/cartAdd?UserID=" + userId + "&GoodsID=" + goodsId + "&CartNum=1", new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+                        BaseUtils.closeProgressDialog(progressDialog);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ToastUtil.showMsg(mContext, "网络错误");
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        BaseUtils.closeProgressDialog(progressDialog);
+                        final String responseStr = response.body().string();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Result result = BaseUtils.parseResult(responseStr);
+                                if (result.getSuccess().equals("1")) {
+                                    ToastUtil.showMsg(mContext, "添加购物车成功");
+                                } else {
+                                    ToastUtil.showMsg(mContext, "添加购物车失败");
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
     }
 }
