@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.text.TextUtils;
 
+import com.example.goodsmanage.common.entity.Result;
 import com.example.goodsmanage.common.entity.Type;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -52,6 +53,16 @@ public class BaseUtils {
             typeList = gson.fromJson(responseStr, new TypeToken<ArrayList<Type>>(){}.getType());
         }
         return typeList;
+    }
+
+    public static Result parseResult(String responseStr) {
+        Result result = new Result();
+        result.setSuccess("0");
+        if (!TextUtils.isEmpty(responseStr)) {
+            Gson gson = new Gson();
+            result = gson.fromJson(responseStr, Result.class);
+        }
+        return result;
     }
 
 }

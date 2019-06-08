@@ -159,23 +159,16 @@ public class AddGoodsActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        parseResult(responseStr);
+                        Result result = BaseUtils.parseResult(responseStr);
+                        if (result.getSuccess().equals("1")) {
+                            ToastUtil.showMsg(mContext, "发布成功");
+                            finish();
+                        } else {
+                            ToastUtil.showMsg(mContext, "发布失败");
+                        }
                     }
                 });
             }
         });
-    }
-
-    private void parseResult(String responseStr) {
-        if (!TextUtils.isEmpty(responseStr)) {
-            Gson gson = new Gson();
-            Result result = gson.fromJson(responseStr, Result.class);
-            if (result.getSuccess().equals("1")) {
-                ToastUtil.showMsg(mContext, "发布成功");
-                finish();
-            } else {
-                ToastUtil.showMsg(mContext, "发布失败");
-            }
-        }
     }
 }
