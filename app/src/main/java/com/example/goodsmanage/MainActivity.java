@@ -32,6 +32,7 @@ import com.example.goodsmanage.acitvity.ModifyUserActivity;
 import com.example.goodsmanage.adapter.CartRecyclerAdapter;
 import com.example.goodsmanage.adapter.ViewPagerFragmentAdapter;
 import com.example.goodsmanage.common.entity.Car;
+import com.example.goodsmanage.common.entity.Result;
 import com.example.goodsmanage.common.entity.Type;
 import com.example.goodsmanage.common.utils.BaseUtils;
 import com.example.goodsmanage.common.utils.HttpUtils;
@@ -45,7 +46,9 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import okhttp3.Call;
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText editMax;
     private EditText editMin;
     private Button btnSearch;
+    private Button btnAddOrder;
 
     private TextView tvAllPublish, tvAllOrder, tvAllComment, tvModifyUser;
 
@@ -144,7 +148,8 @@ public class MainActivity extends AppCompatActivity {
     private void parseCar(String responseStr) {
         if (!TextUtils.isEmpty(responseStr)) {
             Gson gson = new Gson();
-            carList = gson.fromJson(responseStr, new TypeToken<ArrayList<Car>>(){}.getType());
+            carList = gson.fromJson(responseStr, new TypeToken<ArrayList<Car>>() {
+            }.getType());
         }
     }
 
@@ -157,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        btnAddOrder = findViewById(R.id.btn_add_order);
         recyclerShopcar = findViewById(R.id.recycler_shopcar);
         tvModifyUser = findViewById(R.id.tv_modify_user);
         tvAllPublish = findViewById(R.id.tv_all_publish);
@@ -244,6 +250,55 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnAddOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int userId = BaseUtils.getUserId();
+                if (userId <= 0) {
+                    ToastUtil.showMsg(mContext, "登录失效，请重新登录");
+                    Intent intent = new Intent(mContext, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                    return;
+                }
+                for (Car car : carList) {
+                    final ProgressDialog progressDialog1 = BaseUtils.showProgressDialog(mContext, "正在结算...");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    String date = dateFormat.format(new Date());
+                    String extUrl = "?UserID=" + userId + "&GoodsID=" + car.getGoodsId() + "&OrderNum=" +
+                            car.getCartNum() + "&Sum=" + car.getCartNum() * car.getPrice() + "&OrderTime=" + date;
+                    HttpUtils.doGet(BaseUtils.BASE_URL + "/orderAdd" + extUrl, new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    BaseUtils.closeProgressDialog(progressDialog1);
+                                    ToastUtil.showMsg(mContext, "网络错误");
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onResponse(Call call, final Response response) throws IOException {
+                            BaseUtils.closeProgressDialog(progressDialog1);
+                            final String responseStr = response.body().string();
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Result result = BaseUtils.parseResult(responseStr);
+                                    if (result.getSuccess().equals("1")) {
+                                        ToastUtil.showMsg(mContext, "下单成功");
+                                    } else {
+                                        ToastUtil.showMsg(mContext, "下单失败");
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
     }
 
     private void initTabAndPager() {
