@@ -10,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,7 +29,9 @@ import com.example.goodsmanage.acitvity.AllOrderActivity;
 import com.example.goodsmanage.acitvity.AllPublishActivity;
 import com.example.goodsmanage.acitvity.GoodsListActivity;
 import com.example.goodsmanage.acitvity.ModifyUserActivity;
+import com.example.goodsmanage.adapter.CartRecyclerAdapter;
 import com.example.goodsmanage.adapter.ViewPagerFragmentAdapter;
+import com.example.goodsmanage.common.entity.Car;
 import com.example.goodsmanage.common.entity.Type;
 import com.example.goodsmanage.common.utils.BaseUtils;
 import com.example.goodsmanage.common.utils.HttpUtils;
@@ -67,6 +71,10 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView tvAllPublish, tvAllOrder, tvAllComment, tvModifyUser;
 
+    private RecyclerView recyclerShopcar;
+    private CartRecyclerAdapter adapter;
+    private List<Car> carList = new ArrayList<>();
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -79,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                     layoutHome.setVisibility(View.VISIBLE);
                     return true;
                 case R.id.navigation_shopcar:
+                    getCar();
                     layoutHome.setVisibility(View.GONE);
                     layoutMine.setVisibility(View.GONE);
                     layoutShopCar.setVisibility(View.VISIBLE);
@@ -93,6 +102,52 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    private void getCar() {
+        int userId = BaseUtils.getUserId();
+        if (userId <= 0) {
+            ToastUtil.showMsg(mContext, "登录失效，请重新登录");
+            Intent intent = new Intent(mContext, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
+        final ProgressDialog progressDialog = BaseUtils.showProgressDialog(mContext, "正在加载...");
+        HttpUtils.doGet(BaseUtils.BASE_URL + "/getUserCart?UserID=" + userId, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                BaseUtils.closeProgressDialog(progressDialog);
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                BaseUtils.closeProgressDialog(progressDialog);
+                final String responseStr = response.body().string();
+                parseCar(responseStr);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        initCar();
+                    }
+                });
+            }
+        });
+    }
+
+    private void initCar() {
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerShopcar.setLayoutManager(linearLayoutManager);
+        adapter = new CartRecyclerAdapter(mContext, carList);
+        recyclerShopcar.setAdapter(adapter);
+    }
+
+    private void parseCar(String responseStr) {
+        if (!TextUtils.isEmpty(responseStr)) {
+            Gson gson = new Gson();
+            carList = gson.fromJson(responseStr, new TypeToken<ArrayList<Car>>(){}.getType());
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        recyclerShopcar = findViewById(R.id.recycler_shopcar);
         tvModifyUser = findViewById(R.id.tv_modify_user);
         tvAllPublish = findViewById(R.id.tv_all_publish);
         tvAllOrder = findViewById(R.id.tv_all_order);
@@ -187,6 +243,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
     }
 
     private void initTabAndPager() {
