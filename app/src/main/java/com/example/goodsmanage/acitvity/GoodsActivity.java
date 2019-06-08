@@ -3,16 +3,21 @@ package com.example.goodsmanage.acitvity;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.goodsmanage.R;
+import com.example.goodsmanage.adapter.CommentRecyclerAdapter;
+import com.example.goodsmanage.common.entity.Comment;
 import com.example.goodsmanage.common.entity.Goods;
 import com.example.goodsmanage.common.utils.BaseUtils;
 import com.example.goodsmanage.common.utils.HttpUtils;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,6 +37,10 @@ public class GoodsActivity extends AppCompatActivity {
     private TextView tvIntro;
     private TextView tvId;
     private Context mContext;
+
+    private RecyclerView recyclerComment;
+    private List<Comment> commentList = new ArrayList<>();
+    private CommentRecyclerAdapter commentRecyclerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +68,39 @@ public class GoodsActivity extends AppCompatActivity {
                 });
             }
         });
+        initComments();
+    }
+
+    private void initComments() {
+        HttpUtils.doGet(BaseUtils.BASE_URL + "/searchGoodComment?GoodsID=" + goodsId, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                final String responseStr = response.body().string();
+                parseCommentList(responseStr);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
+                        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                        recyclerComment.setLayoutManager(layoutManager);
+                        commentRecyclerAdapter = new CommentRecyclerAdapter(mContext, commentList);
+                        recyclerComment.setAdapter(commentRecyclerAdapter);
+                    }
+                });
+            }
+        });
+    }
+
+    private void parseCommentList(String responseStr) {
+        if (!TextUtils.isEmpty(responseStr)) {
+            Gson gson = new Gson();
+            commentList = gson.fromJson(responseStr, new TypeToken<ArrayList<Comment>>(){}.getType());
+        }
     }
 
     private void parseGoodsInfo(String responseStr) {
@@ -83,5 +125,6 @@ public class GoodsActivity extends AppCompatActivity {
         tvPrice = findViewById(R.id.tv_goods_price_info);
         tvNum = findViewById(R.id.tv_goods_num_info);
         tvIntro = findViewById(R.id.tv_goods_intro_info);
+        recyclerComment = findViewById(R.id.recycler_comment);
     }
 }

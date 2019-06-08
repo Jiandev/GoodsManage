@@ -12,7 +12,7 @@ import android.content.Context;
 public class BaseUtils {
 
     public static final String GOODS_ID = "goodsId";
-    public static final String BASE_URL = "http://192.168.0.119:8080/GoodsManage/servlet";
+    public static final String BASE_URL = "http://192.168.199.222:8080/GoodsManage/servlet";
 
     private static ProgressDialog progressDialog;
 

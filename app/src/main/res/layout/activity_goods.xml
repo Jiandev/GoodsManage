@@ -21,7 +21,7 @@
                 android:layout_height="300dp"
                 android:layout_margin="20dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/img_goods"/>
+                android:src="@drawable/img_goods" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -33,8 +33,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="商品编号："/>
+                    android:text="商品编号："
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/tv_goods_id_info"
@@ -42,10 +42,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:textSize="16sp"
                     android:maxLines="1"
+                    android:text="3"
                     android:textColor="@color/qmui_config_color_gray_2"
-                    android:text="3"/>
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <View
@@ -63,8 +63,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="商品名称："/>
+                    android:text="商品名称："
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/tv_goods_name_info"
@@ -72,10 +72,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:textSize="16sp"
                     android:maxLines="1"
+                    android:text="笔记本"
                     android:textColor="@color/qmui_config_color_gray_2"
-                    android:text="笔记本"/>
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <View
@@ -93,8 +93,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="商品价格："/>
+                    android:text="商品价格："
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/tv_goods_price_info"
@@ -102,10 +102,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:textSize="16sp"
                     android:maxLines="1"
+                    android:text="4000.5元"
                     android:textColor="#f15334"
-                    android:text="4000.5元"/>
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <View
@@ -123,8 +123,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="剩余数量："/>
+                    android:text="剩余数量："
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/tv_goods_num_info"
@@ -132,10 +132,10 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:textSize="16sp"
                     android:maxLines="1"
+                    android:text="1"
                     android:textColor="@color/qmui_config_color_gray_2"
-                    android:text="1"/>
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <View
@@ -153,8 +153,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20sp"
-                    android:text="商品介绍："/>
+                    android:text="商品介绍："
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/tv_goods_intro_info"
@@ -162,10 +162,25 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="end"
-                    android:textSize="16sp"
+                    android:text="八成新轻薄联想笔记本"
                     android:textColor="@color/qmui_config_color_gray_2"
-                    android:text="八成新轻薄联想笔记本"/>
+                    android:textSize="16sp" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="20dp"
+                android:text="评价"
+                android:textSize="30sp" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_comment"
+                android:layout_width="match_parent"
+                android:layout_height="500dp">
+
+            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
     </ScrollView>
 
