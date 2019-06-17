@@ -85,7 +85,7 @@ public class AllPublishRecyclerAdapter extends RecyclerView.Adapter<AllPublishRe
 
     private void showDeleteCommentDialog(final int position, final int goodsId) {
         new QMUIDialog.MessageDialogBuilder(mContext)
-                .setTitle("删除评论")
+                .setTitle("删除商品")
                 .setMessage("确定要删除吗？")
                 .addAction("取消", new QMUIDialogAction.ActionListener() {
                     @Override
